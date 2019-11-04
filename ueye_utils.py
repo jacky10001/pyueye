@@ -1,34 +1,26 @@
-#!/usr/bin/env python
 
-#------------------------------------------------------------------------------
-#                 PyuEye example - utilities modul
-#
-# Copyright (c) 2017 by IDS Imaging Development Systems GmbH.
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-# 1. Redistributions of source code must retain the above copyright notice,
-#    this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright notice,
-#    this list of conditions and the following disclaimer in the documentation
-#    and/or other materials provided with the distribution.
-# 3. Neither the name of the copyright holder nor the names of its contributors
-#    may be used to endorse or promote products derived from this software
-#    without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-# POSSIBILITY OF SUCH DAMAGE.
-#------------------------------------------------------------------------------
+""" 
+Provide utils to ueye_camera.py
+
+@fcn_header:
+    def get_bits_per_pixel(color_mode):
+    class uEyeException(Exception):
+    def check(ret):
+    class ImageBuffer:
+    class MemoryInfo:
+    class ImageData:
+    class Rect:
+    class FrameThread(Thread):
+
+
+@refer: pyueye_example, source code from 
+    https://en.ids-imaging.com/techtipps-detail/en_techtip-embedded-vision-kit.html
+
+@create data: 2019.11.04
+@update data: 2019.11.05
+@author: Yang-Jie Gao
+@e-mail: 60777001h@ntnu.edu.tw
+"""
 
 from pyueye import ueye
 from threading import Thread
@@ -127,13 +119,13 @@ class ImageData:
     def unlock(self):
         check(ueye.is_UnlockSeqBuf(self.h_cam, self.img_buff.mem_id, self.img_buff.mem_ptr))
 
+
 class Rect:
     def __init__(self, x=0, y=0, width=0, height=0):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
-
 
 
 class FrameThread(Thread):
