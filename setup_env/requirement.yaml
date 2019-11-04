@@ -1,0 +1,23 @@
+name: ueye
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - certifi=2019.9.11=py36_0
+  - pip=19.3.1=py36_0
+  - python=3.6.7=he025d50_1005
+  - setuptools=41.6.0=py36_0
+  - wheel=0.33.6=py36_0
+  - wincertstore=0.2=py36_1002
+  - vc=14.1=h0510ff6_4
+  - vs2015_runtime=14.16.27012=hf0eaf9b_0
+  - pip:
+    - enum34==1.1.6
+    - numpy==1.17.3
+    - opencv-python==4.1.1.26
+    - pillow==6.2.1
+    - pyqt4==4.11.4
+    - pyueye==4.90.0.0
+    - pywin32==225
+prefix: D:\YangJieGao\tools\Anaconda3\envs\ueye
+
