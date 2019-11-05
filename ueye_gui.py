@@ -10,6 +10,9 @@ uEye CCD GUI control with PyQt
 @refer: pyueye_example, source code from 
     https://en.ids-imaging.com/techtipps-detail/en_techtip-embedded-vision-kit.html
 
+    Copyright (c) 2017 by IDS Imaging Development Systems GmbH.
+    All rights reserved.
+
 @create data: 2019.11.04
 @update data: 2019.11.05
 @author: Yang-Jie Gao
