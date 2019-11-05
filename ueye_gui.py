@@ -43,7 +43,8 @@ class PyuEyeQtView(QtGui.QWidget):
         super(self.__class__, self).__init__(parent)
 
         self.image = None
-        self.save_btn = False
+        self.SAVE_MODE = False
+        self.VIEW_MODE = 'RAW'
         
         ## Camera sensor view ##
         self.graphics_view = QtGui.QGraphicsView(self)
@@ -62,30 +63,50 @@ class PyuEyeQtView(QtGui.QWidget):
         self.resize(715, 512)
         
         ## Button ##        
-        self.btn_open = QtGui.QPushButton('Save',self)
-        self.btn_open.setToolTip('Save')
-        self.btn_open.resize(self.btn_open.sizeHint())
-        self.vbox_btn.addWidget(self.btn_open)
+        self.btn_save_open = QtGui.QPushButton('Save',self)
+        self.btn_save_open.setToolTip('Save')
+        self.btn_save_open.resize(self.btn_save_open.sizeHint())
+        self.vbox_btn.addWidget(self.btn_save_open)
         
-        self.btn_stop = QtGui.QPushButton('Stop',self)
-        self.btn_stop.setToolTip('stop')
-        self.btn_stop.resize(self.btn_stop.sizeHint())
-        self.vbox_btn.addWidget(self.btn_stop)
+        self.btn_save_stop = QtGui.QPushButton('Stop',self)
+        self.btn_save_stop.setToolTip('stop')
+        self.btn_save_stop.resize(self.btn_save_stop.sizeHint())
+        self.vbox_btn.addWidget(self.btn_save_stop)
         
-        self.btn_open.clicked.connect(self.start_to_save_image)
-        self.btn_stop.clicked.connect(self.stop_to_save_image)
+        self.btn_mode_raw = QtGui.QPushButton('Raw Mode',self)
+        self.btn_mode_raw.setToolTip('raw mode')
+        self.btn_mode_raw.resize(self.btn_mode_raw.sizeHint())
+        self.vbox_btn.addWidget(self.btn_mode_raw)
+        
+        # self.btn_mode_sp = QtGui.QPushButton('Spectrum Mode',self)
+        # self.btn_mode_sp.setToolTip('spectrum mode')
+        # self.btn_mode_sp.resize(self.btn_mode_sp.sizeHint())
+        # self.vbox_btn.addWidget(self.btn_mode_sp)
+        
+        self.btn_save_open.clicked.connect(self.SET_SAVE_OPEN)
+        self.btn_save_stop.clicked.connect(self.SET_SAVE_STOP)
+        self.btn_mode_raw.clicked.connect(self.SET_VIEW_RAW)
+        # self.btn_mode_sp.clicked.connect(self.SET_VIEW_SP)
         
         ## Layout ##
         self.hbox_main.addLayout(self.vbox_btn)
         self.setLayout(self.hbox_main)
     
-    def start_to_save_image(self):
-        self.save_btn = True
-        print('Save image', self.save_btn)
+    def SET_SAVE_OPEN(self):
+        self.SAVE_MODE = True
+        print('Save image', self.SAVE_MODE)
     
-    def stop_to_save_image(self):
-        self.save_btn = False
-        print('Save image', self.save_btn)
+    def SET_SAVE_STOP(self):
+        self.SAVE_MODE = False
+        print('Save image', self.SAVE_MODE)
+    
+    def SET_VIEW_RAW(self):
+        self.VIEW_MODE = 'RAW'
+        print('Mode', self.VIEW_MODE)
+    
+    # def SET_VIEW_SP(self):
+        # self.VIEW_MODE = 'SP'
+        # print('Mode', self.VIEW_MODE)
         
     def draw_background(self, painter, rect):
         if self.image:
@@ -95,11 +116,8 @@ class PyuEyeQtView(QtGui.QWidget):
     def update_image(self, image):
         self.scene.update()
 
-    def user_callback(self, image_data):
-        return image_data.as_cv_image()
-
     def handle(self, image_data):
-        self.image = self.user_callback(self, image_data, self.save_btn)
+        self.image = self.user_callback(self, image_data, self.SAVE_MODE)
         
         self.update_signal.emit(self.image)
 

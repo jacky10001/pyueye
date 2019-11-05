@@ -12,7 +12,6 @@ Provide utils to ueye_camera.py
     class Rect:
     class FrameThread(Thread):
 
-
 @refer: pyueye_example, source code from 
     https://en.ids-imaging.com/techtipps-detail/en_techtip-embedded-vision-kit.html
 
@@ -115,7 +114,6 @@ class ImageData:
         else:
             return numpy.reshape(self.array, (self.mem_info.height, self.mem_info.width))
 
-
     def unlock(self):
         check(ueye.is_UnlockSeqBuf(self.h_cam, self.img_buff.mem_id, self.img_buff.mem_ptr))
 
@@ -126,6 +124,7 @@ class Rect:
         self.y = y
         self.width = width
         self.height = height
+
 
 
 class FrameThread(Thread):
@@ -146,7 +145,7 @@ class FrameThread(Thread):
                                            img_buffer.mem_id)
             if ret == ueye.IS_SUCCESS:
                 self.notify(ImageData(self.cam.handle(), img_buffer))
-
+            
             #break
 
     def notify(self, image_data):

@@ -6,7 +6,6 @@ e.g. colormode, capture image, open ccd, stop ccd
 @fcn_header:
     class Camera:
 
-
 @refer: pyueye_example, source code from 
     https://en.ids-imaging.com/techtipps-detail/en_techtip-embedded-vision-kit.html
 
@@ -104,6 +103,35 @@ class Camera:
     def get_colormode(self):
         ret = ueye.is_SetColorMode(self.h_cam, ueye.IS_GET_COLOR_MODE)
         return ret
+        
+    def set_FrameRate(self, rate):
+        rate = ueye.DOUBLE(rate)
+        newrate = ueye.DOUBLE()
+        check(ueye.is_SetFrameRate(self.h_cam, rate, newrate))
+        print('FR:',newrate)
+    
+    def set_Exposure(self, val):
+        ms = ueye.DOUBLE(val)
+        check(ueye.is_Exposure(self.h_cam, ueye.IS_EXPOSURE_CMD_SET_EXPOSURE, ms, ueye.sizeof(ms)))
+        print('EXP:',ms)
+        
+    def set_full_auto(self):
+        enable = ueye.DOUBLE(1)
+        zero = ueye.DOUBLE(0)
+        ms = ueye.DOUBLE(20)
+        rate = ueye.DOUBLE(50)
+        newrate = ueye.DOUBLE()
+
+        ret = ueye.is_SetAutoParameter(self.h_cam, ueye.IS_SET_ENABLE_AUTO_GAIN, enable, zero)
+        ret = ueye.is_SetAutoParameter(self.h_cam, ueye.IS_SET_ENABLE_AUTO_SHUTTER, enable, zero)
+        ret = ueye.is_SetFrameRate(self.h_cam, rate, newrate)
+        ret = ueye.is_Exposure(self.h_cam, ueye.IS_EXPOSURE_CMD_GET_EXPOSURE, ms, ueye.sizeof(ms))
+        
+        print("Auto mode")
+        print('A_GAIN:',ret)
+        print('A_SHUTTER:',ret)
+        print('FR:',ret,newrate)
+        print('EXP:',ret,ms)
 
     def get_format_list(self):
         count = ueye.UINT()
@@ -114,12 +142,3 @@ class Camera:
         check(ueye.is_ImageFormat(self.h_cam, ueye.IMGFRMT_CMD_GET_LIST,
                                   format_list, ueye.sizeof(format_list)))
         return format_list
-    
-    def set_Exposure(self):
-        ms = ueye.DOUBLE(20)
-        check(ueye.is_Exposure(self.h_cam, ueye.IS_EXPOSURE_CMD_GET_EXPOSURE, ms, ueye.sizeof(ms)))
-    
-    def get_Exposure(self):
-        ms = ueye.DOUBLE(20)
-        ret = ueye.is_Exposure(self.h_cam, ueye.IS_EXPOSURE_CMD_GET_EXPOSURE, ms, ueye.sizeof(ms))
-        return ret

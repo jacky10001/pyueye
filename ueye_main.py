@@ -26,6 +26,7 @@ from pyueye import ueye
 
 import cv2
 import numpy as np
+from numpy.fft import fft2, fftshift
 
 ## global variable ##
 global save_count
@@ -55,6 +56,8 @@ def process_image(self, image_data, enable):
     # show the image with Qt
     return QtGui.QImage(image, 1280, 1024, QtGui.QImage.Format_RGB888)
 
+# def RecFrame(self, image_data):
+
 def main():
 
     # we need a QApplication, that runs our QT Gui Framework    
@@ -70,6 +73,9 @@ def main():
     cam.init()
     cam.set_colormode(ueye.IS_CM_SENSOR_RAW8)
     cam.set_aoi(0,0, 1280, 1024)
+    # cam.set_full_auto()
+    cam.set_FrameRate(15)
+    cam.set_Exposure(58)
     cam.alloc()
     cam.capture_video()
 
