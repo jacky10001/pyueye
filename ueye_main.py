@@ -27,29 +27,50 @@ from PyQt4 import QtGui
 
 from pyueye import ueye
 
+import glob
 import cv2
 import numpy as np
 from numpy.fft import fft2, fftshift
 
+import os
+os.makedirs('cap', exist_ok='True')
+
 ## global variable ##
-global save_count
-global loop_count
-save_count = 0
+global save_count, loop_count, keep_save
+
+try:
+    tmp = sorted(glob.glob('cap/*.bmp'))[-1]
+    tmp = tmp[tmp.rfind('\\')+1:-4]
+    print('Start number: ', tmp)
+except:
+    tmp = '00000'
+    print('Start number: ', tmp)
+
+save_count = int(tmp) + 1
 loop_count = 0
+keep_save = False
 
 
 def process_image(self, image_data, enable):
-    global save_count
-    global loop_count
+    global save_count, loop_count, keep_save
 
     # reshape the image data as 1dimensional array
     image = image_data.as_1d_image()
     
     # save gray image
-    if enable and loop_count%10==0:
+    if enable == 'STOP':
+        keep_save = 'STOP'
+    elif enable == 'SAVE':
+        keep_save = 'STOP'
         print('loop count:',loop_count,' save count:',save_count)
-        cv2.imwrite('cap/%d.bmp'%save_count, image)
+        cv2.imwrite('cap/%05d.bmp'%save_count, image)
         save_count += 1
+    elif enable == 'AUTO':
+        keep_save = 'AUTO'
+        if loop_count%10==0:
+            print('loop count:',loop_count,' save count:',save_count)
+            cv2.imwrite('cap/%05d.bmp'%save_count, image)
+            save_count += 1
     
     # make a rgb image for show. (gray -> rgb, because QPainter can't use Format_Indexed8)
     image = image.reshape(1024,1280,1)
@@ -57,7 +78,7 @@ def process_image(self, image_data, enable):
     
     loop_count += 1
     # show the image with Qt
-    return QtGui.QImage(image, 1280, 1024, QtGui.QImage.Format_RGB888)
+    return QtGui.QImage(image, 1280, 1024, QtGui.QImage.Format_RGB888), keep_save
 
 # def RecFrame(self, image_data):
 
@@ -78,7 +99,7 @@ def main():
     cam.set_aoi(0,0, 1280, 1024)
     # cam.set_full_auto()
     cam.set_FrameRate(15)
-    cam.set_Exposure(58)
+    cam.set_Exposure(66)
     cam.alloc()
     cam.capture_video()
 

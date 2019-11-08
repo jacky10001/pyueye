@@ -46,7 +46,7 @@ class PyuEyeQtView(QtGui.QWidget):
         super(self.__class__, self).__init__(parent)
 
         self.image = None
-        self.SAVE_MODE = False
+        self.SAVE_MODE = 'NO_SAVE'
         self.VIEW_MODE = 'RAW'
         
         ## Camera sensor view ##
@@ -65,11 +65,16 @@ class PyuEyeQtView(QtGui.QWidget):
         self.processors = []
         self.resize(715, 512)
         
-        ## Button ##        
+        ## Button ##
         self.btn_save_open = QtGui.QPushButton('Save',self)
         self.btn_save_open.setToolTip('Save')
         self.btn_save_open.resize(self.btn_save_open.sizeHint())
         self.vbox_btn.addWidget(self.btn_save_open)
+        
+        self.btn_auto_open = QtGui.QPushButton('Auto',self)
+        self.btn_auto_open.setToolTip('Auto')
+        self.btn_auto_open.resize(self.btn_auto_open.sizeHint())
+        self.vbox_btn.addWidget(self.btn_auto_open)
         
         self.btn_save_stop = QtGui.QPushButton('Stop',self)
         self.btn_save_stop.setToolTip('stop')
@@ -87,6 +92,7 @@ class PyuEyeQtView(QtGui.QWidget):
         # self.vbox_btn.addWidget(self.btn_mode_sp)
         
         self.btn_save_open.clicked.connect(self.SET_SAVE_OPEN)
+        self.btn_auto_open.clicked.connect(self.SET_SAVE_AUTO)
         self.btn_save_stop.clicked.connect(self.SET_SAVE_STOP)
         self.btn_mode_raw.clicked.connect(self.SET_VIEW_RAW)
         # self.btn_mode_sp.clicked.connect(self.SET_VIEW_SP)
@@ -96,11 +102,15 @@ class PyuEyeQtView(QtGui.QWidget):
         self.setLayout(self.hbox_main)
     
     def SET_SAVE_OPEN(self):
-        self.SAVE_MODE = True
+        self.SAVE_MODE = 'SAVE'
+        print('Save image', self.SAVE_MODE)
+    
+    def SET_SAVE_AUTO(self):
+        self.SAVE_MODE = 'AUTO'
         print('Save image', self.SAVE_MODE)
     
     def SET_SAVE_STOP(self):
-        self.SAVE_MODE = False
+        self.SAVE_MODE = 'STOP'
         print('Save image', self.SAVE_MODE)
     
     def SET_VIEW_RAW(self):
@@ -120,7 +130,7 @@ class PyuEyeQtView(QtGui.QWidget):
         self.scene.update()
 
     def handle(self, image_data):
-        self.image = self.user_callback(self, image_data, self.SAVE_MODE)
+        self.image, self.SAVE_MODE = self.user_callback(self, image_data, self.SAVE_MODE)
         
         self.update_signal.emit(self.image)
 
